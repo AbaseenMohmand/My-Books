@@ -17,10 +17,10 @@ namespace my_books.Controllers
             _service = service;
         }
 
-        [HttpPost("add-book")]
-        public IActionResult AddBook([FromBody]BookVM bookVM)
+        [HttpPost("add-book-authors")]
+        public IActionResult AddBookWithAuthors([FromBody]BookVM bookVM)
         {
-            _service.AddBook(bookVM);
+            _service.AddBookWithAuthors(bookVM);
             return Ok();
         }
         [HttpGet("get-all-books")]
@@ -44,6 +44,14 @@ namespace my_books.Controllers
             return Ok(updateBook);
 
         }
+
+        [HttpDelete("delete-book-by-id/{id}")]
+        public IActionResult DeleteBook(int id)
+        {
+            _service.DeleteBookById(id);
+            return Ok();
+        }
+
 
 
 

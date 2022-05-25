@@ -18,7 +18,7 @@
                         DateRead = DateTime.Now.AddDays(-10),
                         Rate = 4,
                         Genre ="Biography",
-                        Author = "FirstArthur",
+                       
                         CoverUrl = "http......",
                         DateAdded = DateTime.Now,
                         
@@ -31,7 +31,7 @@
                       
                         Rate = 4,
                         Genre = "Biography",
-                        Author = "SecondArthur",
+                        
                         CoverUrl = "http......",
                         DateAdded = DateTime.Now,
 

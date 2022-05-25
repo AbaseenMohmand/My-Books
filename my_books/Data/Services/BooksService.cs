@@ -12,7 +12,7 @@ namespace my_books.Data.Services
             _context = context;              
         }
 
-        public void AddBook(BookVM bookVM)
+        public void AddBookWithAuthors(BookVM bookVM)
         {
             var book = new Book()
             {
@@ -23,11 +23,24 @@ namespace my_books.Data.Services
                 Rate = bookVM.Rate,
                 Genre = bookVM.Genre,
                 CoverUrl = bookVM.CoverUrl,
-                Author = bookVM.Author,
-                DateAdded = DateTime.Now
+                
+                DateAdded = DateTime.Now,
+                PublisherId = bookVM.PublisherId,
+                
             };
             _context.Books.Add(book);
             _context.SaveChanges();
+
+            foreach(var id in bookVM.AuthorIds)
+            {
+                var _book_author = new Book_Author()
+                {
+                    BookId = book.Id,
+                    AuthorId = id
+                };
+                _context.Book_Authors.Add(_book_author);
+                _context.SaveChanges();
+            }
         }
 
         public List<Book> GetAllBooks()
@@ -36,10 +49,23 @@ namespace my_books.Data.Services
 
         }
 
-        public Book GetBookById(int id)
+        public BookWithAuthorsVM GetBookById(int id)
         {
-           
-                return _context.Books.FirstOrDefault(x => x.Id == id);
+
+            var bookWithAuthors = _context.Books.Where(n => n.Id == id).Select(book => new BookWithAuthorsVM()
+            {
+                Title = book.Title,
+                Description = book.Description,
+                IsRead = book.IsRead,
+                DateRead = book.DateRead,
+                Rate = book.Rate,
+                Genre = book.Genre,
+                CoverUrl = book.CoverUrl,
+                PublisherName = book.Publisher.Name,
+                AuthorNames = book.book_Authors.Select(x => x.Author.FullName).ToList()
+            }).FirstOrDefault();
+
+            return bookWithAuthors;
 
             
             
@@ -58,12 +84,22 @@ namespace my_books.Data.Services
                 book.Rate = bookVM.Rate;
                 book.Genre = bookVM.Genre;
                 book.CoverUrl = bookVM.CoverUrl;
-                book.Author = bookVM.Author;
+                
 
                 _context.SaveChanges();
             }
 
             return book;
+        }
+
+        public void DeleteBookById(int id)
+        {
+            var book = _context.Books.FirstOrDefault(x => x.Id == id);
+            if(book != null)
+            {
+                _context.Books.Remove(book);
+                _context.SaveChanges();
+            }
         }
     }
 }

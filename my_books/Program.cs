@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<BooksService>();
+builder.Services.AddTransient<PublishersService>();
+builder.Services.AddTransient<AuthorsService>();
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
@@ -29,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-AppDbInitializer.Seed(app);
+//AppDbInitializer.Seed(app);
 
 app.Run();
